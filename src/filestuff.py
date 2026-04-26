@@ -62,7 +62,7 @@ def generate_page(from_path, template_path, dest_path,basepath):
     title = extract_title(md_file)
     webpage_text = template.replace("{{ Content }}",html)
     webpage_text = webpage_text.replace("{{ Title }}",title)
-    webpage_text = webpage_text.replace('href="/','ref="' + basepath)
+    webpage_text = webpage_text.replace('href="/','href="' + basepath)
     webpage_text = webpage_text.replace('src="/','src="'+ basepath)
 
     
