@@ -23,6 +23,21 @@ def recursivecopy(old_folder,new_folder):
         else:
             print(f"unexpected entry: {oldfile}")
 
+def generate_site(old_folder,new_folder):
+    dir_contents = os.listdir(old_folder)
+    for c in dir_contents:
+        oldfile = os.path.join(old_folder,c)
+        newfile = os.path.join(new_folder,c)
+        if os.path.isfile(oldfile):
+            print(f"generating from {oldfile} to {newfile}")
+            #shutil.copy(oldfile,newfile)
+            generate_page(oldfile, "template.html", newfile[:-2] + "html")
+        elif os.path.isdir(oldfile):
+            print(f"recursively copying directory: {oldfile} to {newfile}")
+            generate_site(oldfile,newfile)
+        else:
+            print(f"unexpected entry: {oldfile}")
+
 
 # Create a generate_page(from_path, template_path, dest_path) function. It should:
 

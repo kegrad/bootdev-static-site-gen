@@ -31,13 +31,15 @@ def markdown_to_html_node(markdown):
         elif (blocktype == BlockType.UNORDERED_LIST):
             for el in b.split("\n"):
                 li = (el.split("- "))[1]
-                listnodes.append(LeafNode("li",li))
+                #listnodes.append(LeafNode("li",li))
+                textnodes = text_to_textnodes(li)
+                listnodes.append(ParentNode("li",[text_node_to_html_node(n) for n in textnodes]))
         elif (blocktype == BlockType.ORDERED_LIST):
             for el in b.split("\n"):
                 li = el[el.find(".")+2:]
-                print("el=>" + el + "<-")
-                print("li=>" + li + "<-")
-                listnodes.append(LeafNode("li",li))
+                #listnodes.append(LeafNode("li",li))
+                textnodes = text_to_textnodes(li)
+                listnodes.append(ParentNode("li",[text_node_to_html_node(n) for n in textnodes]))
 
         previousblocktype = blocktype
 
