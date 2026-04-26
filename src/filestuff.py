@@ -23,7 +23,7 @@ def recursivecopy(old_folder,new_folder):
         else:
             print(f"unexpected entry: {oldfile}")
 
-def generate_site(old_folder,new_folder):
+def generate_site(old_folder,new_folder,basepath):
     dir_contents = os.listdir(old_folder)
     for c in dir_contents:
         oldfile = os.path.join(old_folder,c)
@@ -31,10 +31,10 @@ def generate_site(old_folder,new_folder):
         if os.path.isfile(oldfile):
             print(f"generating from {oldfile} to {newfile}")
             #shutil.copy(oldfile,newfile)
-            generate_page(oldfile, "template.html", newfile[:-2] + "html")
+            generate_page(oldfile, "template.html", newfile[:-2] + "html",basepath)
         elif os.path.isdir(oldfile):
             print(f"recursively copying directory: {oldfile} to {newfile}")
-            generate_site(oldfile,newfile)
+            generate_site(oldfile,newfile,basepath)
         else:
             print(f"unexpected entry: {oldfile}")
 
@@ -49,7 +49,7 @@ def generate_site(old_folder,new_folder):
 #     Replace the {{ Title }} and {{ Content }} placeholders in the template with the HTML and title you generated.
 #     Write the new full HTML page to a file at dest_path. Be sure to create any necessary directories if they don't exist.
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path,basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     f = open(from_path)
     md_file = f.read()
@@ -62,6 +62,9 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(md_file)
     webpage_text = template.replace("{{ Content }}",html)
     webpage_text = webpage_text.replace("{{ Title }}",title)
+    webpage_text = webpage_text.replace('href="/','ref="' + basepath)
+    webpage_text = webpage_text.replace('src="/','src="'+ basepath)
+
     
     dirname = os.path.dirname(dest_path)
     os.makedirs(dirname,exist_ok=True)
